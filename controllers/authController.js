@@ -16,7 +16,7 @@ exports.signup = catchAsync(async (req, res) => {
   const user = await User.create({ name, email, password, passwordChangeDate, role });
   user.password = undefined;
 
-  createSendTokenResponse(user, res, 200);
+  createSendTokenResponse(user, req, res);
 
   const url = `${req.protocol}://${req.get('host')}/account`;
   await new Email(user, url).sendWelcome();
@@ -35,7 +35,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.checkPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password!', 401));
   }
-  createSendTokenResponse(user, res, 200, { sendUser: false });
+  createSendTokenResponse(user, req, res, { sendUser: false });
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
@@ -129,7 +129,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpiresIn = undefined;
   await user.save();
   // 4) Log the user in : send JWT
-  createSendTokenResponse(user, res, 200, { sendUser: false });
+  createSendTokenResponse(user, req, res, { sendUser: false });
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -150,19 +150,8 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
   // 4) Log user in (send JWT)
 
-  createSendTokenResponse(user, res, 200, { sendUser: false });
+  createSendTokenResponse(user, req, res, { sendUser: false });
 });
-
-function createSendTokenResponse(user, res, statusCode, { sendUser = true } = {}) {
-  const token = getToken(user._id || user.id);
-
-  res.cookie('jwt', token, {
-    maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    sucure: process.env.NODE_ENV === 'production',
-  });
-  res.status(statusCode).json({ status: 'success', token, data: sendUser ? user : undefined });
-}
 
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
   const token = req.cookies?.jwt;
@@ -184,3 +173,14 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
   res.locals.user = user;
   next();
 });
+
+function createSendTokenResponse(user, req, res, { sendUser = true, statusCode = 200 } = {}) {
+  const token = getToken(user._id || user.id);
+
+  res.cookie('jwt', token, {
+    maxAge: process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sucure: req.secure || req.headers['x-forwarded-proto'],
+  });
+  res.status(statusCode).json({ status: 'success', token, data: sendUser ? user : undefined });
+}
