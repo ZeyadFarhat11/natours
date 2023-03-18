@@ -133,14 +133,11 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
-// tourSchema.post(/^find/, function (docs, next) {
-//   console.log(`Query took ${Date.now() - this.startTime} ms`);
-//   next();
-// });
+
 tourSchema.pre('aggregate', function (next) {
   if (JSON.stringify(this.pipeline()[0]).includes('$geoNear')) return next();
   this.pipeline().unshift({ $match: { secret: { $ne: true } } });
-  console.log(this.pipeline());
+  // console.log(this.pipeline());
   next();
 });
 

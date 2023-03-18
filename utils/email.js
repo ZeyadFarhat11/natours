@@ -52,7 +52,7 @@ class Email {
     // 3) Create transport and send email
     try {
       await this.createTransport().sendMail(mailOptions);
-      console.log(`Email sent ✔`);
+      // console.log(`Email sent ✔`);
     } catch (err) {
       console.log(`Email Sent Error 💥`);
       console.error(err);

@@ -12,7 +12,7 @@ class APIFeatures {
       (e) => `$${e}`
     );
     queryObject = JSON.parse(queryString);
-    console.log(queryObject);
+    // console.log(queryObject);
     this.query.find(queryObject);
     return this;
   }

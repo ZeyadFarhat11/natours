@@ -18,7 +18,7 @@ export const updateUserData = async (e) => {
   });
   const json = await res.json();
 
-  console.log(json);
+  // console.log(json);
   if (json?.status === 'success') {
     showAlert('success', 'Settings updated successfully.');
   } else {

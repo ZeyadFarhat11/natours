@@ -29,17 +29,6 @@ exports.createReview = catchAsync(async (req, res) => {
   res.json({ status: 'success', data: { review: reviewDoc } });
 });
 
-// exports.checkSameUser = catchAsync(async (req, res, next) => {
-//   const review = await Review.findById(req.params.id);
-
-//   console.log(review);
-//   const { user } = req;
-//   if (String(user._id) !== String(review.user?._id)) {
-//     return next(new AppError("You cann't delete other users reviews!", 401));
-//   }
-//   next();
-// });
-
 exports.updateReview = factory.updateOne(Review, { name: 'review', related: true });
 exports.deleteReview = factory.deleteOne(Review);
 exports.getReview = factory.getOne(Review, { name: 'review' });

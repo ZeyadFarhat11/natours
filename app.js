@@ -3,13 +3,13 @@ const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const app = express();
-const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const toursRouter = require('./routes/tourRoutes');
 const usersRouter = require('./routes/userRoutes');
@@ -38,9 +38,9 @@ app.use(
     message: 'Too many requests! Please try again later.',
   })
 );
-// app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(compression());
 
 app.use(mongoSanitize());
 app.use(xss());
