@@ -1,9 +1,10 @@
 import { updateUserData, updateUserPassword, handleUserPhotoChange } from './account';
-import { login, logout } from './login';
+import { login, logout, signup } from './auth';
 import bookTour from './stripe';
 
 const logoutBtn = document.querySelector('button.nav__el.nav__el--logout');
 const loginForm = document.querySelector('.login-form .form');
+const signupForm = document.querySelector('.signup-form .form');
 const accountUserForm = document.querySelector(
   '.user-view .user-view__form-container .form-user-data'
 );
@@ -19,6 +20,8 @@ if (logoutBtn) {
 
 if (loginForm) {
   loginForm.addEventListener('submit', login);
+} else if (signupForm) {
+  signupForm.addEventListener('submit', signup);
 }
 
 if (accountUserForm) {

@@ -171,8 +171,14 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
 
   // console.log({ user });
   res.locals.user = user;
+  req.user = user;
   next();
 });
+
+exports.notLoggedIn = (req, res, next) => {
+  if (req.user || res.locals.user) return res.redirect(req.redirectUrl || '/');
+  return next();
+};
 
 function createSendTokenResponse(user, req, res, { sendUser = true, statusCode = 200 } = {}) {
   const token = getToken(user._id || user.id);

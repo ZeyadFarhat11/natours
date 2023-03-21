@@ -22,7 +22,7 @@ exports.getTour = catchAsync(async (req, res) => {
   res.render('tour', { tour, title: tour.name });
 });
 
-exports.login = (req, res) => {
+exports.getLogin = (req, res) => {
   if (res.locals.user) {
     return res.redirect('/');
   }
@@ -46,3 +46,12 @@ exports.getMyBookings = catchAsync(async (req, res) => {
     res.redirect('/');
   }
 });
+
+exports.getSignup = (req, res) => {
+  res.render('signup', { title: 'Signup' });
+};
+
+exports.setRedirectUrl = (req, res, next) => {
+  res.redirectUrl = '/account';
+  next();
+};

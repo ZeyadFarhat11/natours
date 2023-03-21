@@ -2,11 +2,13 @@ const express = require('express');
 const {
   getOverview,
   getTour,
-  login,
+  getLogin,
+  getSignup,
   getAccount,
   getMyBookings,
+  setRedirectUrl,
 } = require('../controllers/viewController');
-const { isLoggedIn, protect } = require('../controllers/authController');
+const { isLoggedIn, protect, notLoggedIn } = require('../controllers/authController');
 const { createBookingAfterPay } = require('../controllers/bookingController');
 
 const router = express.Router();
@@ -17,6 +19,8 @@ router.use(isLoggedIn);
 
 router.get('/', createBookingAfterPay, getOverview);
 router.get('/tours/:tourSlug', getTour);
-router.get('/login', login);
 router.get('/my-bookings', protect, getMyBookings);
+router.get('/login', setRedirectUrl, notLoggedIn, getLogin);
+router.get('/signup', setRedirectUrl, notLoggedIn, getSignup);
+
 module.exports = router;
