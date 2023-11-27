@@ -1,0 +1,11 @@
+extends baseAccount
+
+block accountContent 
+  each tour in tours
+    .booking
+      .wrapper
+        img(src=`/img/tours/${tour.imageCover}`, alt!=tour.name)
+        .text
+          h3= tour.name + ' Tour'
+          p #{tour.difficulty} #{tour.duration}-day tour
+      a.btn.btn--green.btn--small(href=`/tours/${tour.slug}`) view details

@@ -7,11 +7,13 @@ const catchAsync = require('../utils/catchAsync');
 exports.getCheckoutSession = catchAsync(async (req, res) => {
   const tour = await Tour.findById(req.params.tourId);
 
-  if (!tour) {
-    throw new AppError('Invalid tour id!', 400);
-  }
+  if (!tour) throw new AppError('Invalid tour id!', 400);
+
+  if (await Booking.findOne({ tour: req.params.tourId, user: req.user._id }))
+    throw new AppError('You have already booked this tour', 400);
 
   const websiteDomain = `${req.protocol}://${req.get('host')}`;
+  const imageUrl = `${websiteDomain}/img/tours/${tour.imageCover}`;
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -25,7 +27,7 @@ exports.getCheckoutSession = catchAsync(async (req, res) => {
           product_data: {
             name: `${tour.name} Tour`,
             description: tour.summary,
-            images: [`${websiteDomain}/img/tours/${tour.imageCover}`],
+            images: [imageUrl],
           },
         },
         quantity: 1,

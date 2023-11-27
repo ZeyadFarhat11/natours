@@ -1271,3 +1271,39 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+.user-view .booking {
+  margin: 0 50px 25px;
+  display: flex;
+  justify-content: space-between;
+  background-image: linear-gradient(to right bottom, rgb(68, 126, 37), rgb(32, 144, 108));
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px #808080;
+}
+.user-view .booking .wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.user-view .booking .text {
+  margin: 20px 0;
+}
+.user-view .booking .text h3 {
+  color: #fff;
+  font-size: 22px;
+}
+.user-view .booking .text p {
+  color: #e9e9e9;
+  font-size: 16px;
+}
+.user-view .booking img {
+  height: 100%;
+  width: 150px;
+  object-fit: cover;
+}
+.user-view .booking a {
+  padding: 8px 20px;
+  margin-right: 20px;
+  align-self: center;
+}

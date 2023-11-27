@@ -30,28 +30,30 @@ exports.getLogin = (req, res) => {
 };
 
 exports.getAccount = (req, res) => {
-  res.render('account', { title: 'Account' });
+  res.render('account/index', { title: 'Account', active: 'settings' });
 };
 
 exports.getMyBookings = catchAsync(async (req, res) => {
   const bookings = await Booking.find({ user: req.user._id });
-  const tours = await Tour.find({ _id: { $in: bookings.map((e) => e.tour._id) } });
+  const tours = bookings.map((booking) => booking.tour);
+  console.log(tours);
 
-  if (tours.length) {
-    res.render('overview', {
-      title: 'My Bookings',
-      tours,
-    });
-  } else {
-    res.redirect('/');
-  }
+  res.render('account/bookings', { title: 'My Bookings', tours, active: 'bookings' });
+  // if (tours.length) {
+  //   res.render('overview', {
+  //     title: 'My Bookings',
+  //     tours,
+  //   });
+  // } else {
+  //   res.redirect('/');
+  // }
 });
 
 exports.getSignup = (req, res) => {
   res.render('signup', { title: 'Signup' });
 };
 
-exports.setRedirectUrl = (req, res, next) => {
-  res.redirectUrl = '/account';
+exports.setRedirectUrl = (url) => (req, res, next) => {
+  res.redirectUrl = url;
   next();
 };

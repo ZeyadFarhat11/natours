@@ -19,8 +19,8 @@ router.use(isLoggedIn);
 
 router.get('/', createBookingAfterPay, getOverview);
 router.get('/tours/:tourSlug', getTour);
-router.get('/my-bookings', protect, getMyBookings);
-router.get('/login', setRedirectUrl, notLoggedIn, getLogin);
-router.get('/signup', setRedirectUrl, notLoggedIn, getSignup);
+router.get('/account/bookings', protect, getMyBookings);
+router.get('/login', setRedirectUrl('/account'), notLoggedIn, getLogin);
+router.get('/signup', setRedirectUrl('/account'), notLoggedIn, getSignup);
 
 module.exports = router;

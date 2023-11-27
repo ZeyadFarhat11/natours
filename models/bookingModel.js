@@ -31,7 +31,10 @@ const bookingSchema = new Schema(
 );
 
 bookingSchema.pre(/^find/, function (next) {
-  this.populate({ path: 'user' }).populate({ path: 'tour', select: 'name' });
+  this.populate({ path: 'user' }).populate({
+    path: 'tour',
+    select: 'name slug imageCover difficulty duration',
+  });
   next();
 });
 
